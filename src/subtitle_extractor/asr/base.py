@@ -9,4 +9,3 @@ class AsrBackend(Protocol):
     model_name: str
 
     def transcribe(self, media_path: Path, language: str) -> SubtitleDocument: ...
-

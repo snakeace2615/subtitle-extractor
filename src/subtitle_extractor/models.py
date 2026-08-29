@@ -18,9 +18,22 @@ class SubtitleSegment(BaseModel):
 
 class SubtitleDocument(BaseModel):
     schema_version: str = "subtitle-document/v1"
-    media_file: str
-    source_language: str
+    media_file: str = Field(min_length=1)
+    source_language: str = Field(min_length=1)
     segments: list[SubtitleSegment]
+
+    @model_validator(mode="after")
+    def segments_must_be_unique_and_ordered(self) -> "SubtitleDocument":
+        seen_ids: set[int] = set()
+        previous_start = -1.0
+        for segment in self.segments:
+            if segment.id in seen_ids:
+                raise ValueError(f"duplicate segment id: {segment.id}")
+            if segment.start < previous_start:
+                raise ValueError("segments must be ordered by start time")
+            seen_ids.add(segment.id)
+            previous_start = segment.start
+        return self
 
 
 class TranscriptionRequest(BaseModel):
@@ -35,4 +48,3 @@ class TranscriptionResponse(BaseModel):
     backend: str
     model: str
     document: SubtitleDocument
-

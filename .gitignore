@@ -8,3 +8,11 @@ dist/
 build/
 *.egg-info/
 
+# Local development documentation and agent guidance
+/docs/
+/AGENTS.md
+
+# Local media inputs
+/target/
+.codex
+.agents

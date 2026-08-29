@@ -16,4 +16,3 @@ def test_subtitle_document_contract() -> None:
 def test_segment_rejects_invalid_time_range() -> None:
     with pytest.raises(ValidationError):
         SubtitleSegment(id=0, start=2, end=1, text="Invalid")
-
